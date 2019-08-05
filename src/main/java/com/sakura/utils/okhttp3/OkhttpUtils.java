@@ -54,11 +54,12 @@ public class OkhttpUtils {
         } catch (IOException e) {
             LOGGER.error("请求失败, e={}", e.getMessage());
         }
+
         return resp;
 
     }
 
-    public static String get(String url, Map<String,String> params) {
+    public static String get(String url, Map<String, String> params) {
         StringBuilder paramStr = new StringBuilder();
         if (params != null && !params.isEmpty()) {
             params.forEach((k, v) -> paramStr.append(k).append("=").append(v).append("&"));
@@ -89,6 +90,25 @@ public class OkhttpUtils {
         }
 
         return string;
+
+    }
+
+    /**
+     * 异步请求
+     *
+     * @param url
+     * @param params
+     * @param callback
+     */
+    public static void postJsonAsync(String url, Map<String, String> params, Callback callback) {
+        RequestBody requestBody = RequestBody.create(MEDIATYPE_JSON, JSON.toJSONString(params));
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        Call call = client.newCall(request);
+        // 异步执行
+        call.enqueue(callback);
 
     }
 

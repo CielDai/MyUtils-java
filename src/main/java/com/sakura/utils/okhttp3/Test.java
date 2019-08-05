@@ -1,5 +1,11 @@
 package com.sakura.utils.okhttp3;
 
+import okhttp3.*;
+import org.springframework.util.StopWatch;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Description: test
  *
@@ -11,16 +17,29 @@ package com.sakura.utils.okhttp3;
  */
 public class Test {
 
+
+    private static final OkHttpClient client;
+
+    private static int connectTimeout = 10;
+    private static int writeTimeout = 10;
+    private static int readTimeout = 30;
+
+
     public void get() {
 
         String s = OkhttpUtils.get("http://www.baidu.com");
-        System.out.println(s);
     }
 
 
-    public static void main(String[] args) {
-        Test test = new Test();
-        test.get();
+    static {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                .readTimeout(readTimeout, TimeUnit.SECONDS)
+                .build();
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
 
     }
 
